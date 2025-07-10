@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NuvemLabs – Airtel Africa Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+    <style>
+        /* Global Reset & Box Sizing */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* Body & Background - Enhanced with a soft, inviting color */
+        body {
+            margin: 0;
+            background-color: #e6eef5; /* A soft, calming blue-grey */
+            font-family: 'DM Sans', sans-serif; /* Primary clean sans-serif */
+            color: #1a1a1a; /* Dark text for good contrast */
+            overflow-x: hidden;
+            padding: 0; /* Remove overall body padding for full width content */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased; /* Smoother font rendering */
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Container for main content areas - Centered */
+        .content-wrapper {
+            max-width: 1400px; /* Wider content area */
+            margin: 0 auto; /* Center the wrapper */
+            padding: 0 4vw; /* Responsive padding based on viewport width */
+            width: 100%;
+        }
+
+        /* Header - Animated NuvemLabs Masthead */
+        header {
+            position: relative;
+            min-height: 60vh; /* Takes up significant screen height initially */
+            display: flex;
+            flex-direction: column; /* Allow stacking of h1 and p */
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Hide overflow from initial animation position */
+            background-color: #ffffff; /* White background for the intro area */
+            padding: 0 4vw;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+        }
+
+        header h1 {
+            font-family: 'DM Sans', sans-serif; /* Consistent with body */
+            font-weight: 700;
+            font-size: clamp(3rem, 10vw, 7rem); /* Responsive font size */
+            color: #2c3e50; /* Dark blue-grey, complementing the background */
+            letter-spacing: -0.03em; /* Slightly tighter for modern feel */
+            margin: 0; /* Remove default margin */
+            line-height: 0.9; /* Tight line height */
+            text-align: center;
+            opacity: 0; /* Hidden by default for JS animation */
+            transform: translateY(20px); /* Start slightly below */
+            animation: nuvemlabsFadeIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.5s; /* Delay for a smoother entry */
+        }
+
+        header p.tagline {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            font-size: clamp(1rem, 2.5vw, 1.8rem); /* Responsive size for tagline */
+            color: #5d748f; /* Lighter blue-grey for subtitle */
+            margin: 15px 0 0; /* Space below h1, no top margin */
+            line-height: 1.2;
+            text-align: center;
+            opacity: 0; /* Hidden for animation */
+            transform: translateY(20px);
+            animation: taglineFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 1.2s; /* Delay after h1 animation */
+        }
+
+        /* Main content sections - Centered */
+        section {
+            max-width: 1200px; /* Max width for sections */
+            margin: 80px auto; /* More vertical space, auto for centering */
+            padding: 0 2vw; /* Smaller horizontal padding for sections */
+            opacity: 0; /* Hidden for animation */
+            transform: translateY(20px);
+            animation: contentFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 2.0s; /* Delay after header tagline animates */
+        }
+
+        /* Section Titles - Clean and understated */
+        section h2 {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500; /* Medium weight */
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem); /* Responsive font size */
+            color: #34495e; /* A slightly darker blue-grey for emphasis */
+            margin: 0 auto 40px auto; /* Centered with auto margins, more space below title */
+            position: relative;
+            padding-bottom: 15px; /* Space for subtle line */
+            border-bottom: 1px solid #c9d7e0; /* Very light, thin line matching theme */
+            display: table; /* Allows auto margins to center block elements */
+            letter-spacing: -0.02em;
+        }
+
+        /* Grid inside each section - Centered horizontally */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsive grid */
+            gap: 30px; /* Consistent spacing */
+            padding-bottom: 20px;
+            overflow-x: hidden; /* Don't want horizontal scroll here */
+            justify-content: center; /* Centers the grid tracks/items */
+            justify-items: center; /* Centers items within their own grid cells */
+        }
+
+        /* Cards - Minimalist, image-focused */
+        .card {
+            background: #ffffff;
+            border-radius: 8px; /* Soft rounding */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); /* Subtle, larger shadow */
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 100%; /* Take full width of grid column */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Gentle lift */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+        }
+
+        /* Images - Modern, with aspect ratio */
+        .card .img-wrapper { /* A wrapper for the actual image to achieve square ratio */
+            width: 100%;
+            padding-bottom: 100%; /* Creates a square container */
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .card .img-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px; /* Apply border-radius to the image itself */
+            border: none; /* No extra border */
+            padding-bottom: 0; /* Reset padding for the actual image */
+        }
+
+        /* Card text - Aligned to center */
+        .card-body h3 {
+            margin: 0 0 5px;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .card-body p.emp-id {
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #666;
+            text-align: center;
+            font-family: 'IBM Plex Mono', monospace; /* Monospace for employee ID */
+        }
+
+        /* Modal Styles - Overlay, clean, subtle */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7); /* Darker overlay */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease forwards;
+            backdrop-filter: blur(5px); /* More blur for focus */
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 500px; /* Wider modal */
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px; /* Soft rounding */
+            padding: 35px 30px 45px; /* More padding */
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+            animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            color: #1a1a1a;
+            border: 1px solid #eee; /* Very subtle border */
+        }
+        .modal-content .img-wrapper { /* Use wrapper for modal image too */
+            width: 180px; /* Fixed size for modal image */
+            height: 180px;
+            margin: 0 auto 25px; /* Center and add space */
+            border-radius: 50%; /* Make modal image circular again */
+            overflow: hidden;
+            position: relative;
+        }
+        .modal-content .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%; /* Apply to actual image */
+            border: 2px solid #a8b9c9; /* Subtle border matching theme */
+        }
+        .modal-content h2 {
+            margin: 0 0 15px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #2c3e50; /* Dark blue-grey for modal name */
+            letter-spacing: -0.02em;
+        }
+        .modal-content .info {
+            margin: 12px 0;
+            font-size: 0.95rem;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #555;
+            line-height: 1.5;
+        }
+        .modal-content .info strong {
+            color: #34495e; /* Darker blue-grey for info labels */
+            min-width: 70px;
+            display: inline-block;
+            font-weight: 500;
+        }
+        .modal-content .info span {
+            word-break: break-all;
+            font-family: 'IBM Plex Mono', monospace; /* Monospace for contact details */
+        }
+        .modal-content .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem; /* Smaller close button for subtlety */
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .modal-content .close:hover {
+            color: #1a1a1a;
+            transform: rotate(90deg); /* Subtle spin */
+        }
+
+        /* Footer for design credit */
+        .footer {
+            margin-top: auto; /* Push footer to the bottom */
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #777; /* Subtle grey */
+            background-color: #e0e8f0; /* Lighter shade of main background */
+            border-top: 1px solid #c9d7e0; /* Matching border */
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* Animations */
+        @keyframes nuvemlabsFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes taglineFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                padding: 0 3vw;
+            }
+            section {
+                margin: 60px auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0; /* Remove body padding */
+            }
+            .content-wrapper {
+                padding: 0 20px; /* Fixed padding on smaller screens */
+            }
+            header {
+                min-height: 50vh;
+                padding: 0 20px;
+            }
+            header h1 {
+                font-size: clamp(2.5rem, 9vw, 5rem);
+            }
+            header p.tagline {
+                font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+                margin-top: 10px;
+            }
+            section {
+                margin: 50px auto;
+                padding: 0; /* Remove section padding, handled by wrapper */
+            }
+            section h2 {
+                font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+                margin-bottom: 30px;
+            }
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Smaller cards */
+                gap: 20px;
+            }
+            .card {
+                padding: 15px;
+            }
+            .card .img-wrapper {
+                margin-bottom: 10px;
+            }
+            .card-body h3 {
+                font-size: 1rem;
+            }
+            .card-body p.emp-id {
+                font-size: 0.8rem;
+            }
+            .modal-content {
+                max-width: 90%;
+                padding: 25px 20px;
+            }
+            .modal-content .img-wrapper {
+                width: 140px;
+                height: 140px;
+            }
+            .modal-content h2 {
+                font-size: 1.6rem;
+            }
+            .modal-content .info {
+                font-size: 0.9rem;
+            }
+            .footer {
+                padding: 20px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 0 15px;
+            }
+            header {
+                min-height: 40vh;
+            }
+            header h1 {
+                font-size: clamp(2rem, 12vw, 4rem);
+            }
+            header p.tagline {
+                font-size: clamp(0.8rem, 3vw, 1.2rem);
+                margin-top: 8px;
+            }
+            section h2 {
+                font-size: clamp(1.2rem, 5vw, 1.8rem);
+                margin-bottom: 25px;
+            }
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Even smaller cards */
+                gap: 15px;
+            }
+            .card {
+                padding: 10px;
+            }
+            .modal-content .img-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+            .modal-content h2 {
+                font-size: 1.4rem;
+            }
+            .modal-content .info {
+                font-size: 0.85rem;
+            }
+            .modal-content .close {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>NuvemLabs</h1>
+    <p class="tagline">Airtel Africa Team</p>
+</header>
+
+<div class="content-wrapper" id="teamContainer"></div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" id="closeBtn">&times;</span>
+        <div class="img-wrapper">
+             <img src="" id="modalImg" alt="Profile" onerror="this.src='images/placeholder.png';"/>
+        </div>
+        <h2 id="modalName"></h2>
+        <p class="info"><strong>ID:</strong> <span id="modalId"></span></p>
+        <p class="info"><strong>Email:</strong> <span id="modalEmail"></span></p>
+        <p class="info"><strong>Contact:</strong> <span id="modalContact"></span></p>
+    </div>
+</div>
+
+<footer class="footer">
+    Designed by Rishav Kumar Sharma
+</footer>
+
+<script>
+    const teams = [
+        {
+            title: "Managers",
+            members: [
+                { name:"Mayank Pandey", empId:"M001", email:"mapandey@nuvemlabs.in", contact:"+91‑9810561468", img:"images/mayank.jpg" },
+                { name:"Ravi Kant Gupta", empId:"M002", email:"ragupta@nuvemlabs.in", contact:"+91‑9971982575", img:"images/ravi.jpg" }
+            ]
+        },
+        {
+            title: "Database Team",
+            members: [
+                { name:"Badal Nagar", empId:"DB101", email:"banagar@nuvemlabs.in", contact:"+91‑9351450605", img:"images/badal.jpg" },
+                { name:"Himanshu", empId:"N/A", email:"himanshu@nuvemlabs.in", contact:"+91‑8920086833", img:"images/himanshu.jpg" }
+            ]
+        },
+        {
+            title: "Linux Team",
+            members: [
+                { name:"Satbeer Singh", empId:"LN201", email:"sasingh2@nuvemlabs.in", contact:"+91‑7836890999", img:"images/satbeer.jpg" },
+                { name:"Abhishek Chomal", empId:"131", email:"abchomal@nuvemlabs.in", contact:"+91‑7689937201", img:"images/abhishek_chomal.jpg" },
+                { name:"Rishav Kumar Sharma", empId:"134", email:"risharma@nuvemlabs.in", contact:"+91‑6362773945", img:"images/rishav_kumar_sharma.jpg" }
+            ]
+        },
+        {
+            title: "VM Team",
+            members: [
+                { name:"Manish Pratap Singh", empId:"VM301", email:"masingh@nuvemlabs.in", contact:"+91‑9876543214", img:"images/manish.jpg" },
+                { name:"Mukesh Kumar", empId:"N/A", email:"mukumar@nuvemlabs.in", contact:"+91‑8574730090", img:"images/mukesh.jpg" },
+                { name:"Anurag Mishra", empId:"N/A", email:"anmishra@nuvemlabs.in", contact:"+91‑8853380604", img:"images/anurag.jpg" }
+            ]
+        },
+        {
+            title: "Storage / Backup Team",
+            members: [
+                { name:"Bhavesh Jaiswal", empId:"ST401", email:"bhjaiswal@nuvemlabs.in", contact:"+91‑9165790524", img:"images/bhavesh.jpg" },
+                { name:"Anuj Kumar", empId:"N/A", email:"ankumar@nuvemlabs.in", contact:"9818764359", img:"images/anuj.jpg" },
+                { name:"Satya Pal", empId:"N/A", email:"sapal@nuvemlabs.in", contact:"+91‑9891551528", img:"images/satya.jpg" }
+            ]
+        },
+        {
+            title: "Network Team",
+            members: [
+                { name:"Mithlesh Kumar", empId:"NT501", email:"mikumar@nuvemlabs.in", contact:"+91‑9386142451", img:"images/mithlesh.jpg" },
+                { name:"Mridul Srivastava", empId:"N/A", email:"mrsrivastav@nuvemlabs.in", contact:"+91‑8299354995", img:"images/mridul.jpg" },
+                { name:"Jitendra Kumar Shivahare", empId:"N/A", email:"jishivahare@nuvemlabs.in", contact:"+91‑8103859955", img:"images/jitendra.jpg" }
+            ]
+        }
+    ];
+
+    const container = document.getElementById('teamContainer');
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeBtn');
+    const modalImg = document.getElementById('modalImg');
+    const modalName = document.getElementById('modalName');
+    const modalId = document.getElementById('modalId');
+    const modalEmail = document.getElementById('modalEmail');
+    const modalContact = document.getElementById('modalContact');
+
+    teams.forEach(team => {
+        const sec = document.createElement('section');
+        const h2 = document.createElement('h2');
+        h2.textContent = team.title;
+        sec.appendChild(h2);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+
+        team.members.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            // Use a div wrapper for the image to maintain aspect ratio with object-fit
+            card.innerHTML = `
+                <div class="img-wrapper">
+                    <img src="${m.img}" alt="Photo of ${m.name}" onerror="this.src='images/placeholder.png';" />
+                </div>
+                <div class="card-body">
+                    <h3>${m.name}</h3>
+                    <p class="emp-id">${m.empId}</p>
+                </div>`;
+            card.onclick = () => {
+                modal.classList.add('active');
+                modalImg.src = m.img;
+                modalName.textContent = m.name;
+                modalId.textContent = m.empId;
+                modalEmail.textContent = m.email;
+                modalContact.textContent = m.contact;
+            };
+            grid.appendChild(card);
+        });
+
+        sec.appendChild(grid);
+        container.appendChild(sec);
+    });
+
+    closeBtn.onclick = () => modal.classList.remove('active');
+    modal.onclick = e => { if (e.target === modal) modal.classList.remove('active'); };
+</script>
+
+</body>
+</html>
